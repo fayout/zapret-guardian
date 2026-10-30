@@ -116,22 +116,4 @@ zapret-guardian/
 └── README.md                  # Документация
 ```
 
----
 
-## 📝 Добавление Gemini / Google AI Studio
-
-В программу встроен готовый пресет для работы с Gemini API и Google AI Studio:
-* `gemini.google.com`
-* `generativelanguage.googleapis.com`
-* `aistudio.google.com`
-* `alkalimakersuite-pa.clients6.google.com`
-* `deepmind.google`
-* `proactivebackend-pa.googleapis.com`
-
-Чтобы добавить их в список фильтрации Zapret: перейдите во вкладку **«📝 Списки Доменов»** и нажмите **«+ AI & Gemini Пресет»**.
-
----
-
-## 📜 Лицензия
-
-MIT License © 2026 fayout
