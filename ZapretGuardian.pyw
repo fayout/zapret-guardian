@@ -455,16 +455,17 @@ class ZapretGuardianApp:
         ctk.CTkLabel(p_row, text="Быстрые наборы:", font=ctk.CTkFont(size=11), text_color="#94a3b8").pack(side="left", padx=(16, 10), pady=8)
 
         p_buttons = [
-            ("discord", "🎙️ Discord Полный"),
-            ("youtube", "📺 YouTube 4K & CDN"),
-            ("trackers", "🧲 Торренты (RuTracker)"),
-            ("ai_dev", "🧠 AI (ChatGPT, Claude, Gemini)")
+            ("discord", "🎙️ Discord"),
+            ("youtube", "📺 YouTube 4K"),
+            ("telegram", "✈️ Telegram Web"),
+            ("trackers", "🧲 Торренты"),
+            ("ai_dev", "🧠 AI & Gemini"),
         ]
         for key, name in p_buttons:
             btn = ctk.CTkButton(
                 p_row,
                 text=name,
-                width=120,
+                width=100,
                 height=24,
                 font=ctk.CTkFont(size=10),
                 fg_color="#1e2638",

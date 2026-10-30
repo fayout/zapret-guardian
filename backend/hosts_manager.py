@@ -40,6 +40,21 @@ PRESETS = {
             "youtubei.googleapis.com",
         ],
     },
+    "telegram": {
+        "name": "Telegram Web & Links",
+        "description": "t.me, web.telegram.org, telesco.pe, cdn",
+        "domains": [
+            "t.me",
+            "telegram.org",
+            "web.telegram.org",
+            "telesco.pe",
+            "tx.me",
+            "telegram.me",
+            "tdesktop.com",
+            "cdn-telegram.org",
+            "stel.com",
+        ],
+    },
     "trackers": {
         "name": "Торрент-трекеры",
         "description": "RuTracker, Rutor, NNM-Club",
