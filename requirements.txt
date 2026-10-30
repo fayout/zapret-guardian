@@ -1,0 +1,11 @@
+# Zapret Guardian Desktop GUI & Service Dependencies
+customtkinter>=5.2.0
+pystray>=0.19.5
+Pillow>=10.0.0
+psutil>=5.9.0
+darkdetect>=0.8.0
+
+# Optional Web Backend (FastAPI)
+fastapi>=0.100.0
+uvicorn>=0.22.0
+python-multipart>=0.0.6

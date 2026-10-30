@@ -1,0 +1,28 @@
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Local User Settings & State (Prevents leaking local paths)
+settings.json
+*.local
+.env
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Logs & Temporary Files
+*.log
+temp/
+tmp/
+
+# OS & IDE Metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

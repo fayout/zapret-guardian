@@ -1,0 +1,135 @@
+# 🛡️ Zapret Guardian 2.0 PRO
+> **Продвинутый графический центр управления, сетевой радар и авто-тестер стратегий Zapret (WinWS) для стабильного Discord Voice и YouTube 4K/60fps.**
+
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6?style=flat&logo=windows&logoColor=white)
+![UI](https://img.shields.io/badge/GUI-CustomTkinter%20%2B%20Pystray-blueviolet?style=flat)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
+
+---
+
+## 🌟 Зачем нужен Zapret Guardian?
+
+В стандартных сборках **zapret-discord-youtube** находится более 22 различных конфигурационных файлов (`general.bat`, `general (ALT).bat` ... `(ALT13)`, `(FAKE TLS AUTO)` и др.).
+
+Когда провайдер обновляет сигнатуры ТСПУ / DPI:
+* 🎙️ **Ломается голосовая связь в Discord** (*«Подключение к RTC»*, *«Нет маршрута»* или бесконечный дисконнект).
+* 📺 **Замедляется YouTube** — видео не стартуют или падают до 360p из-за троттлинга серверов Google CDN (`googlevideo.com`).
+* ⏳ **Ручной перебор утомителен** — нужно по очереди запускать десятки батников через консоль, заходить в Discord для проверки голоса и надеяться на удачу.
+* 🖥️ **Лишние окна** — висящие черные окна терминала занимают панель задач.
+
+**Zapret Guardian решает эти проблемы:**
+1. **Плавный нативный десктоп-интерфейс** на CustomTkinter (без лагов прокрутки и подвисаний).
+2. **Сворачивание в системный трей Windows** (приложение тихо работает в фоне, можно закрыть в трей).
+3. **Сетевой Радар реального времени**: отправляет реальные UDP STUN пакеты (RFC 5389) для проверки голосового шлюза Discord Voice, пингует Discord API и замеряет скорость отклика CDN YouTube.
+4. **Умный авто-бенчмарк**: за пару секунд тестирует топ-стратегии и выбирает самую быструю.
+5. **Выбор и автопоиск папки Zapret**: работает с любой версией (1.10.x, кастомные пути на дисках C:, D: и т.д.).
+6. **Редактор списков доменов**: мгновенное добавление пресетов (Discord, YouTube, Торрент-трекеры, Gemini & Google AI Studio, ChatGPT).
+7. **Управление фоновой службой Windows**: установка любой выбранной стратегии в автозагрузку как службы Windows (`sc create zapret`).
+
+---
+
+## 📸 Вкладки приложения
+
+Приложение разделено на 4 плавные вкладки:
+* 🌐 **Сетевой Радар** — мгновенная диагностика Discord API, Discord Voice RTC, YouTube Web и YouTube 4K CDN с визуализацией задержки (RTT/TTFB) и статусов.
+* 📦 **Каталог Стратегий** — быстрый поиск по тегам (`🔥 ТОП`, `🎙️ Discord Voice Fix`, `Faked Split`, `Multi Split`, `Sferum SNI`, `QUIC`), переключение в 1 клик без консольных окон.
+* 📝 **Списки Доменов** — удобный просмотр и редактирование `list-general-user.txt`, добавление доменов Google Gemini, AI Studio, Discord, YouTube в один клик.
+* ⚙️ **Настройки & Пути** — указание пути к Zapret вручную (`[📂 Обзор...]`) либо в 1 клик через `[🔍 Автопоиск]` по стандартным дискам.
+
+---
+
+## 🚀 Установка и быстрый запуск
+
+### Требования
+* Windows 10 / 11 (x64)
+* Python 3.10 или новее
+* Установленный [zapret-discord-youtube](https://github.com/bol-van/zapret) (любая версия)
+
+### Шаги установки
+
+1. **Клонируйте репозиторий:**
+   ```bash
+   git clone https://github.com/fayout/zapret-guardian.git
+   cd zapret-guardian
+   ```
+
+2. **Установите зависимости:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Запустите приложение:**
+   * Двойным кликом по `start_guardian.bat` *(автоматически запросит права Администратора, необходимые для WinDivert драйвера)*.
+   * Либо запустите напрямую:
+     ```bash
+     pythonw ZapretGuardian.pyw
+     ```
+
+---
+
+## ⚙️ Указание пути к Zapret
+
+При первом запуске программа автоматически ищет установленный Zapret в стандартных каталогах:
+* `C:\zapret-discord-youtube-1.10.4` (или `1.10.3`, `1.10.2`)
+* `C:\zapret-discord-youtube`
+* `C:\zapret`
+* `D:\zapret-discord-youtube`
+* и др.
+
+Если ваш Zapret установлен в нестандартную папку:
+1. Перейдите во вкладку **«⚙️ Настройки & Пути»**.
+2. Нажмите кнопку **«📂 Обзор...»** и выберите корень вашей папки Zapret (где находится подпапка `bin\winws.exe`).
+3. Нажмите **«💾 Сохранить путь»** — программа перечитает список доступных стратегий и списков доменов.
+
+---
+
+## 🔕 Работа в трее
+
+* При нажатии на крестик (закрытие) окно плавно сворачивается в системный трей (область уведомлений рядом с часами).
+* Клик по иконке в трее открывает главное окно.
+* Правый клик по иконке открывает меню быстрого выбора:
+  * Текущий статус работы `winws.exe`.
+  * Быстрое переключение на популярные стратегии (`general (ALT).bat`, `general (ALT4).bat`, и др.).
+  * Быстрый запуск Сетевого Радара.
+  * Остановка обхода / Полный выход.
+
+---
+
+## 🛠️ Архитектура проекта
+
+```
+zapret-guardian/
+├── ZapretGuardian.pyw         # Главное десктоп-приложение (CustomTkinter + Pystray)
+├── start_guardian.bat         # Скрипт быстрого запуска с UAC авто-повышением
+├── requirements.txt           # Список Python зависимостей
+├── icon.ico                   # Иконка приложения
+├── backend/
+│   ├── config_manager.py      # Управление конфигурацией и автопоиск путей
+│   ├── strategy_parser.py     # Парсер 22+ батников и silent-запуск winws.exe
+│   ├── network_tester.py      # UDP STUN (RFC 5389) и HTTPS TTFB тестер
+│   ├── hosts_manager.py       # Менеджер списков доменов и пресетов
+│   └── guardian_service.py    # Опциональный FastAPI веб-сервер и REST API
+├── static/                    # Опциональный темный веб-интерфейс (HTML/CSS/JS)
+└── README.md                  # Документация
+```
+
+---
+
+## 📝 Добавление Gemini / Google AI Studio
+
+В программу встроен готовый пресет для работы с Gemini API и Google AI Studio:
+* `gemini.google.com`
+* `generativelanguage.googleapis.com`
+* `aistudio.google.com`
+* `alkalimakersuite-pa.clients6.google.com`
+* `deepmind.google`
+* `proactivebackend-pa.googleapis.com`
+
+Чтобы добавить их в список фильтрации Zapret: перейдите во вкладку **«📝 Списки Доменов»** и нажмите **«+ AI & Gemini Пресет»**.
+
+---
+
+## 📜 Лицензия
+
+MIT License © 2026 fayout

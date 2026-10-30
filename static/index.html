@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zapret Guardian 2.0 — Панель управления и Авто-тестер Discord & YouTube</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="logo-shield">
+        <span class="shield-icon">🛡️</span>
+      </div>
+      <div class="brand-info">
+        <div class="brand-title">
+          ZAPRET GUARDIAN <span class="badge-version">v2.0 PRO</span>
+        </div>
+        <div class="brand-sub">Авто-тестер & Менеджер стратегий WinWS</div>
+      </div>
+    </div>
+
+    <!-- Active Service Indicator -->
+    <div class="service-pill" id="servicePill">
+      <span class="status-dot pulsing" id="statusDot"></span>
+      <div class="pill-text">
+        <span class="pill-title" id="statusTitle">WINWS АКТИВЕН</span>
+        <span class="pill-desc" id="statusDesc">Стратегия: Определение...</span>
+      </div>
+    </div>
+
+    <!-- Quick Action Controls -->
+    <div class="nav-actions">
+      <button id="btnQuickTest" class="btn-nav btn-test" title="Проверить доступность Discord и YouTube прямо сейчас">
+        ⚡ Экспресс-Тест
+      </button>
+      <button id="btnRestart" class="btn-nav btn-restart" title="Перезапустить процесс winws">
+        🔄 Перезапуск
+      </button>
+      <button id="btnStop" class="btn-nav btn-stop" title="Остановить winws">
+        ⏹ Стоп
+      </button>
+      <button id="btnOpenFolder" class="btn-nav btn-folder" title="Открыть папку с Zapret в проводнике">
+        📁 Папка
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <!-- Top Section: Real-Time Radar Dashboard -->
+    <section class="radar-section">
+      <div class="section-header between">
+        <div class="header-titles">
+          <h2>🌐 Сетевой Радар: Состояние Доступа</h2>
+          <p>Мониторинг TLS хэндшейков, голосовых UDP-портов Discord и видеопотока YouTube в реальном времени</p>
+        </div>
+        <div class="radar-actions">
+          <button id="btnFullTest" class="btn-primary">
+            <span class="btn-glow"></span>
+            <span class="btn-text">⚡ ЗАПУСТИТЬ ДИАГНОСТИКУ</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Live Metric Cards -->
+      <div class="radar-grid">
+        <!-- Card 1: Discord Gateway -->
+        <div class="metric-card" id="cardDiscordGateway">
+          <div class="metric-top">
+            <span class="metric-icon">💬</span>
+            <span class="metric-badge" id="badgeDiscordGateway">ПРОВЕРКА...</span>
+          </div>
+          <div class="metric-title">Discord API & Gateway</div>
+          <div class="metric-value" id="valDiscordGateway">-- ms</div>
+          <div class="metric-sub" id="subDiscordGateway">discord.com / gateway.discord.gg</div>
+        </div>
+
+        <!-- Card 2: Discord Voice STUN -->
+        <div class="metric-card" id="cardDiscordVoice">
+          <div class="metric-top">
+            <span class="metric-icon">🎙️</span>
+            <span class="metric-badge" id="badgeDiscordVoice">ПРОВЕРКА...</span>
+          </div>
+          <div class="metric-title">Discord Voice (WebRTC)</div>
+          <div class="metric-value" id="valDiscordVoice">-- ms</div>
+          <div class="metric-sub" id="subDiscordVoice">UDP 50000+ / STUN Handshake</div>
+        </div>
+
+        <!-- Card 3: YouTube Web -->
+        <div class="metric-card" id="cardYoutubeWeb">
+          <div class="metric-top">
+            <span class="metric-icon">📺</span>
+            <span class="metric-badge" id="badgeYoutubeWeb">ПРОВЕРКА...</span>
+          </div>
+          <div class="metric-title">YouTube Веб & Интерфейс</div>
+          <div class="metric-value" id="valYoutubeWeb">-- ms</div>
+          <div class="metric-sub" id="subYoutubeWeb">www.youtube.com / youtu.be</div>
+        </div>
+
+        <!-- Card 4: YouTube 4K Stream CDN -->
+        <div class="metric-card" id="cardYoutubeStream">
+          <div class="metric-top">
+            <span class="metric-icon">⚡</span>
+            <span class="metric-badge" id="badgeYoutubeStream">ПРОВЕРКА...</span>
+          </div>
+          <div class="metric-title">YouTube 4K Видеопоток</div>
+          <div class="metric-value" id="valYoutubeStream">-- ms</div>
+          <div class="metric-sub" id="subYoutubeStream">googlevideo.com / CDN Routing</div>
+        </div>
+      </div>
+
+      <!-- Verdict Banner -->
+      <div class="verdict-banner" id="verdictBanner">
+        <span class="verdict-icon" id="verdictIcon">⚡</span>
+        <div class="verdict-text-box">
+          <div class="verdict-headline" id="verdictHeadline">Нажмите «Запустить диагностику», чтобы протестировать текущую стратегию</div>
+          <div class="verdict-details" id="verdictDetails">Система проверит отклик всех критических узлов</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Auto-Optimizer Wizard Card -->
+    <section class="wizard-card">
+      <div class="wizard-left">
+        <div class="wizard-icon">🚀</div>
+        <div class="wizard-content">
+          <h3>Умный Авто-Подбор Лучшей Стратегии</h3>
+          <p>Протестирует ключевые стратегии на вашем провайдере, измерит пинг голосовых серверов Discord и скорость YouTube, и сразу включит победителя.</p>
+        </div>
+      </div>
+      <div class="wizard-right">
+        <button id="btnStartAutoBenchmark" class="btn-accent">
+          ⚡ Найти и Включить Лучшую
+        </button>
+      </div>
+    </section>
+
+    <!-- Main Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-tab="tabStrategies">
+        📦 Каталог Стратегий (<span id="totalStratCount">22</span>)
+      </button>
+      <button class="tab-btn" data-tab="tabLists">
+        📝 Пользовательские Списки Доменов
+      </button>
+      <button class="tab-btn" data-tab="tabService">
+        ⚙️ Служба Windows (Автозагрузка)
+      </button>
+    </div>
+
+    <!-- Tab 1: Strategies Catalog -->
+    <div class="tab-pane active" id="tabStrategies">
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-chips">
+          <button class="chip active" data-filter="all">Все</button>
+          <button class="chip" data-filter="recommended">🔥 Рекомендованные</button>
+          <button class="chip" data-filter="voice">🎙️ С фиксом Voice</button>
+          <button class="chip" data-filter="fake">⚡ Fake TLS / Auto</button>
+          <button class="chip" data-filter="split">✂️ Multisplit / Faked</button>
+        </div>
+        <div class="search-box">
+          <input type="text" id="stratSearch" class="search-input" placeholder="Поиск стратегии...">
+        </div>
+      </div>
+
+      <!-- Strategy Cards Grid -->
+      <div class="strategies-grid" id="strategiesGrid">
+        <!-- Rendered via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Tab 2: User Lists & Domains -->
+    <div class="tab-pane" id="tabLists">
+      <div class="lists-layout">
+        <!-- Left: Quick Presets -->
+        <div class="presets-pane">
+          <h3>⚡ Быстрые Наборы</h3>
+          <p class="pane-hint">Добавьте готовые списки сайтов в один клик:</p>
+
+          <div class="preset-buttons">
+            <button class="preset-btn" data-preset="discord">
+              <span class="p-icon">🎙️</span>
+              <div class="p-meta">
+                <span class="p-title">Discord Полный Стек</span>
+                <span class="p-sub">Голос, Gateway, CDN, обновления</span>
+              </div>
+            </button>
+
+            <button class="preset-btn" data-preset="youtube">
+              <span class="p-icon">📺</span>
+              <div class="p-meta">
+                <span class="p-title">YouTube 4K & CDN</span>
+                <span class="p-sub">googlevideo, ytimg, обход блокировки видео</span>
+              </div>
+            </button>
+
+            <button class="preset-btn" data-preset="trackers">
+              <span class="p-icon">🧲</span>
+              <div class="p-meta">
+                <span class="p-title">Торрент-Трекеры</span>
+                <span class="p-sub">RuTracker, Rutor, NNM-Club</span>
+              </div>
+            </button>
+
+            <button class="preset-btn" data-preset="ai_dev">
+              <span class="p-icon">🧠</span>
+              <div class="p-meta">
+                <span class="p-title">AI & Разработка</span>
+                <span class="p-sub">ChatGPT, Claude, Notion, OpenAI</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Text Editor -->
+        <div class="editor-pane">
+          <div class="editor-header">
+            <div>
+              <h3>Свой список сайтов (list-general-user.txt)</h3>
+              <p class="pane-hint">Каждый домен с новой строки. Эти сайты будут обрабатываться выбранной стратегией Zapret.</p>
+            </div>
+            <button id="btnSaveDomains" class="btn-primary">💾 Сохранить список</button>
+          </div>
+
+          <textarea id="domainListTextarea" class="domains-textarea" spellcheck="false" placeholder="Вставьте домены, например:&#10;rutracker.org&#10;notion.so&#10;discord.com"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Windows Service -->
+    <div class="tab-pane" id="tabService">
+      <div class="service-manager-card">
+        <div class="service-header">
+          <div class="service-icon">⚙️</div>
+          <div>
+            <h3>Управление Службой Windows («zapret»)</h3>
+            <p>Установка Zapret как службы Windows позволяет запускать обход блокировок автоматически при старте ПК без открытия окон терминала и консолей.</p>
+          </div>
+        </div>
+
+        <div class="service-status-box">
+          <div class="s-row">
+            <span class="s-label">Текущий статус службы:</span>
+            <span class="s-value" id="svcStateText">ОПРЕДЕЛЕНИЕ...</span>
+          </div>
+          <div class="s-row">
+            <span class="s-label">Имя службы:</span>
+            <span class="s-value font-mono">zapret</span>
+          </div>
+          <div class="s-row">
+            <span class="s-label">Тип запуска:</span>
+            <span class="s-value font-mono">Автоматически (start=auto)</span>
+          </div>
+        </div>
+
+        <div class="service-actions-row">
+          <button id="btnInstallService" class="btn-accent">
+            📌 Установить текущую стратегию как службу
+          </button>
+          <button id="btnUninstallService" class="btn-danger">
+            🗑 Удалить службу zapret
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Auto Benchmark Modal -->
+  <div class="modal-backdrop" id="autoBenchmarkModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>🚀 Умный Авто-Подбор Стратегий</h3>
+        <button class="modal-close" data-close="autoBenchmarkModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Тестируем ключевые стратегии для вашего провайдера. Проверяется доступность Discord Voice (UDP STUN), шлюзов Discord и CDN-потока YouTube...
+        </p>
+        
+        <div class="bench-progress-box">
+          <div class="progress-bar-container">
+            <div id="benchProgressBar" class="progress-bar-fill"></div>
+          </div>
+          <div class="bench-meta">
+            <span id="benchStatusText">Тестирование стратегии: general (ALT).bat</span>
+            <span id="benchPercentText">0%</span>
+          </div>
+        </div>
+
+        <div class="bench-results-list" id="benchResultsList">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div id="benchWinnerCard" class="winner-card hidden">
+          <div class="winner-badge">🏆 ЛУЧШАЯ СТРАТЕГИЯ</div>
+          <div class="winner-title" id="winnerTitle">general (ALT).bat</div>
+          <div class="winner-stats" id="winnerStats">Discord Voice: 100% (14 ms) | YouTube: 100% (45 ms)</div>
+          <button id="btnApplyWinner" class="btn-accent mt-3">⚡ Активировать победителя</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
