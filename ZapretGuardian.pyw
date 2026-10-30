@@ -3,7 +3,25 @@ import sys
 import ctypes
 import threading
 import time
+import socket
 from tkinter import filedialog, messagebox
+
+SINGLE_INSTANCE_PORT = 52199
+
+def notify_existing_instance() -> bool:
+    """Tries to connect to an existing instance and ask it to show itself."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.8)
+            s.connect(("127.0.0.1", SINGLE_INSTANCE_PORT))
+            s.sendall(b"RESTORE\n")
+            return True
+    except Exception:
+        return False
+
+# If an instance is already running, activate it and exit silently without any error or window
+if notify_existing_instance():
+    sys.exit(0)
 
 # Ensure Admin elevation
 def check_and_elevate():
@@ -23,6 +41,7 @@ def check_and_elevate():
         sys.exit(0)
 
 check_and_elevate()
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BACKEND_DIR = os.path.join(BASE_DIR, "backend")
@@ -44,6 +63,51 @@ ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 
+class SingleInstanceServer:
+    """Listens on localhost socket to receive restore signals from duplicate launches."""
+    def __init__(self, port=SINGLE_INSTANCE_PORT, on_restore_callback=None):
+        self.port = port
+        self.on_restore = on_restore_callback
+        self.server_sock = None
+        self.running = False
+        self.thread = None
+
+    def start(self):
+        try:
+            self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.server_sock.bind(("127.0.0.1", self.port))
+            self.server_sock.listen(5)
+            self.running = True
+            self.thread = threading.Thread(target=self._listen_loop, daemon=True)
+            self.thread.start()
+            return True
+        except Exception:
+            return False
+
+    def _listen_loop(self):
+        while self.running:
+            try:
+                conn, _ = self.server_sock.accept()
+                with conn:
+                    conn.settimeout(1.0)
+                    data = conn.recv(64)
+                    if b"RESTORE" in data:
+                        if self.on_restore:
+                            self.on_restore()
+            except Exception:
+                if not self.running:
+                    break
+
+    def stop(self):
+        self.running = False
+        if self.server_sock:
+            try:
+                self.server_sock.close()
+            except Exception:
+                pass
+
+
 class ZapretGuardianApp:
     def __init__(self):
         self.config_mgr = ConfigManager()
@@ -52,6 +116,10 @@ class ZapretGuardianApp:
         self.strategy_mgr = StrategyManager(zapret_dir)
         self.network_tester = NetworkTester(timeout=3.0)
         self.hosts_mgr = HostsManager(zapret_dir)
+
+        # Single instance IPC listener
+        self.single_instance = SingleInstanceServer(on_restore_callback=self.restore_from_tray)
+        self.single_instance.start()
 
         self.root = ctk.CTk()
         self.root.title("Zapret Guardian 2.0 PRO — Панель управления")
@@ -146,10 +214,19 @@ class ZapretGuardianApp:
 
     def _do_restore(self):
         self.root.deiconify()
+        self.root.state("normal")
         self.root.lift()
+        try:
+            self.root.attributes("-topmost", True)
+            self.root.update_idletasks()
+            self.root.attributes("-topmost", False)
+        except Exception:
+            pass
         self.root.focus_force()
 
     def exit_application(self):
+        if hasattr(self, "single_instance") and self.single_instance:
+            self.single_instance.stop()
         if self.tray_icon:
             self.tray_icon.stop()
         self.root.after(0, self.root.destroy)
